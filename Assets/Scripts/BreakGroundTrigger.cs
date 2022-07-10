@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gate : MonoBehaviour
+public class BreakGroundTrigger : MonoBehaviour
 {
+    public BreakGround breakGround;
     private void OnTriggerEnter(Collider other)
     {
-        GameManager.Instance.winPanel.SetActive(true);
-        Time.timeScale = 0f;
+        breakGround.isStartDecaying = true;
     }
 }
