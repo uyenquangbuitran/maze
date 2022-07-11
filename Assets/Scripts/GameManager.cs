@@ -23,13 +23,34 @@ public class GameManager : MonoBehaviour
     private GameObject autoGuidePanel;
     [SerializeField]
     private GameObject manualGuidePanel;
+    [SerializeField]
+    private Timer timer;
 
-    void Start()
+    [SerializeField]
+    private Timer score;
+    [SerializeField]
+    private GameObject newBestIcon;
+
+    private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(this.gameObject);
 
         Cursor.visible = false;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+#if UNITY_EDITOR
+            if (UnityEditor.EditorApplication.isPlaying)
+            {
+                UnityEditor.EditorApplication.isPlaying = false;
+            }
+#endif
+            Application.Quit();            
+        }
     }
 
     public void LoadScene()
@@ -61,6 +82,8 @@ public class GameManager : MonoBehaviour
         {
             case PanelType.Win:
                 winPanel.SetActive(isActive);
+                score.UpdateTimeDisplay(timer.GetTime());
+                ShowHighScoreIcon(timer.GetTime());
                 break;
             case PanelType.Lose:
                 losePanel.SetActive(isActive);
@@ -76,10 +99,39 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
+    
+    public void SaveScore(float time)
+    {
+        float minutes = Mathf.FloorToInt(time / 60);
+        float seconds = Mathf.FloorToInt(time % 60);
+
+        string currentTime = string.Format("{00:00}{1:00}", minutes, seconds);
+
+        SPrefs.SetFloat("best_time", time);
+    }
+
+    public float GetScore()
+    {
+        if (!SPrefs.HasKey("best_score"))
+        {
+            SPrefs.SetFloat("best_score", 0);
+        }
+
+        return SPrefs.GetFloat("best_score");
+    }
+
+    private void ShowHighScoreIcon(float time)
+    {
+        float currentBestScore = GetScore();
+        if (currentBestScore < time)
+        {
+            newBestIcon.gameObject.SetActive(true);
+        }
+    }
 
     public void ConfirmBtn_OnClick()
     {
         SetActivePanel(PanelType.AutoGuide, false);
         SetActivePanel(PanelType.ManualGuide, false);
-    }
+    }    
 }

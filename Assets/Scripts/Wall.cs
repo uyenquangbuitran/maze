@@ -16,6 +16,8 @@ public class Wall : MonoBehaviour
         Vector3 verDir = -playerController.transform.forward;
         Vector3 horDir = -playerController.transform.right;
         Vector3 direction = verDir + horDir;
-        playerController.controller.SimpleMove(direction.normalized * _velocity * 100);       
+        playerController.controller.SimpleMove(direction.normalized * _velocity * 200);
+
+        AudioController.Instance.PlayCollisionSound();
     }
 }
