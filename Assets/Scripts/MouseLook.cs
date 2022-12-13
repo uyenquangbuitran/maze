@@ -5,6 +5,11 @@ using UnityEngine;
 public class MouseLook : MonoBehaviour
 {
     public float rotaionSpeed;
+
+    private void Start()
+    {
+        rotaionSpeed = 75000 / (float)Screen.width;        
+    }
     void Update()
     {
         float mouseH = Input.GetAxis("Mouse X");

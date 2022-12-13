@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,12 +32,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject newBestIcon;
 
+    public TextMeshProUGUI mouseSpeed;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(this.gameObject);
 
         Cursor.visible = false;
+        mouseSpeed.text = (75000 / (float)Screen.width).ToString();        
     }
 
     private void Update()
